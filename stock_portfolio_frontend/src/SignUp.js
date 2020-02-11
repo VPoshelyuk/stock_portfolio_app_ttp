@@ -1,0 +1,81 @@
+import React from "react";
+import { Redirect } from 'react-router-dom'
+import PasswordMask from 'react-password-mask';
+import { connect } from 'react-redux'
+import { setUser } from './redux/actions/user_actions'
+
+class SignUp extends React.Component{
+    state = {
+        name: "",
+        phonenumber: "",
+        email: "",
+        password: "",
+        passwordConfirmation: ""
+    }
+
+    handleChange = (event) => {
+        if(event.target.name === "password"){
+            this.setState({
+                password: event.target.value,
+                passwordConfirmation: event.target.value
+            })
+        }else{
+            this.setState({
+                [event.target.name]: event.target.value
+            })
+        }
+      }
+    
+    handleSubmit = (e) => {
+        e.preventDefault()
+        fetch("http://localhost:3000/api/v1/signup", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        body: JSON.stringify(this.state)
+        })
+        .then(res => res.json())
+        .then(response => {
+        if(response.errors){
+            alert(response.errors)
+        } else {
+            this.props.setUser(response)
+            this.setState({
+                name: "",
+                phonenumber: "",
+                email: "",
+                password: "",
+                passwordConfirmation: ""
+            })
+        }
+        })
+    }
+    
+
+    render(){
+        if (this.props.currentUser !== null && this.props.currentUser !== undefined) {
+            return <Redirect to='/' />;
+        } 
+        return (
+            <div className="login_main">
+            <p className="form_name" align="center" >Sign Up</p>
+            <form className="reg_form" onSubmit={this.handleSubmit}>
+                <input className="input" type="text" name="name" value={this.state.name} onChange={this.handleChange} placeholder="First Name" />
+                <input className="input" type="text" name="email" value={this.state.email} onChange={this.handleChange} placeholder="Email" />
+                <input className="input" type="password" name="password" value={this.state.password} onChange={this.handleChange} placeholder="Password" />
+                <input className="submit_button" type="submit" value="Sign Up" />
+            </form>
+        </div>
+        );
+    }
+}
+
+function msp(state){
+    return {
+      currentUser: state.currentUser
+    }
+}
+
+export default connect(msp, { setUser })(SignUp)

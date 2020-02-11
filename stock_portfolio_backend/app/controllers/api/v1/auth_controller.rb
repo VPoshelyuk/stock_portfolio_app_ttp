@@ -1,13 +1,13 @@
 class Api::V1::AuthController < ApplicationController
 
     def login
-      user = User.find_by(username: params[:username])
+      user = User.find_by(email: params[:email])
   
       if user && user.authenticate(params[:password])
         token = encode_token(user.id)
         render json: {user: user, token: token}
       else
-        render json: {errors: "No username/password match!"}
+        render json: {errors: "No email/password match!"}
       end
     end
   
