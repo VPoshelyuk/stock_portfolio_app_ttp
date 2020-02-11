@@ -17,14 +17,8 @@ import Profile from './Profile'
 import '../src/App.css'
 
 class App extends React.Component {
-  state = {
-    loaded:false
-  }
   componentDidMount(){
     const token = localStorage.token
-    this.setState({
-      loaded: true
-    })
     if(token){
       fetch("http://localhost:3000/api/v1/auto_login", {
         headers: {
@@ -36,9 +30,8 @@ class App extends React.Component {
         if (response.errors){
           alert(response.errors)
         } else {
-          this.setState({
-            currentUser: response
-          })
+          this.props.setUser(response)
+          localStorage.token = response.token
         }
       })
     }
@@ -52,10 +45,18 @@ class App extends React.Component {
             <LogOut/>
         </Route>
         <Route path="/login">
+          {this.props.currentUser === null ?
             <LogIn/>
+            :
+            <Redirect to="/" />
+          }
         </Route>
         <Route path="/signup">
+          {this.props.currentUser === null ?
             <SignUp/>
+            :
+            <Redirect to="/" />
+          }
         </Route>
         <Route path="/profile">
             {this.props.currentUser !== null ?

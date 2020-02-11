@@ -24,7 +24,7 @@ function NavBar (props) {
                         :
                         <Fragment>
                             <li>
-                            <Link to="/profile">{props.currentUser.name}</Link>
+                            <Link to="/profile">Profile</Link>
                             </li>
                             <li>
                             <Link to="/logout">Log Out</Link>

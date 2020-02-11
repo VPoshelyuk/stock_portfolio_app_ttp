@@ -13,7 +13,8 @@ class Api::V1::AuthController < ApplicationController
   
     def auto_login
       if session_user
-        render json: session_user
+        token = encode_token(session_user.id)
+        render json: {user: session_user, token: token}
       else 
         render json: {errors: "Auto-login failed!"}
       end

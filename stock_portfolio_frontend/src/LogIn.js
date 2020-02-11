@@ -33,19 +33,12 @@ class LogIn extends React.Component{
             alert(response.errors)
           } else {
             this.props.setUser(response)
-            this.setState({
-                email: "",
-                password: ""
-            })
-
+            localStorage.token = response.token
           }
         })
     }
 
     render(){
-        if (this.props.currentUser !== null) {
-            return <Redirect to='/' />;
-        } 
         return (
         <div className="login_main">
             <p className="form_name" align="center" >Log In</p>

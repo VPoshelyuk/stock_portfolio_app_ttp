@@ -16,17 +16,17 @@ ActiveRecord::Schema.define(version: 2020_02_11_012322) do
   enable_extension "plpgsql"
 
   create_table "stocks", force: :cascade do |t|
-    t.string "name"
-    t.integer "price"
+    t.string "ticker"
+    t.decimal "price", precision: 1000, scale: 2
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "user_stocks", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.string "name"
-    t.integer "number"
-    t.integer "price"
+    t.string "ticker"
+    t.integer "quantity"
+    t.decimal "price", precision: 1000, scale: 2
     t.string "status"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -36,8 +36,8 @@ ActiveRecord::Schema.define(version: 2020_02_11_012322) do
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"
-    t.string "password"
-    t.integer "balance"
+    t.string "password_digest"
+    t.decimal "balance", precision: 1000, scale: 2, default: "5000.0"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
