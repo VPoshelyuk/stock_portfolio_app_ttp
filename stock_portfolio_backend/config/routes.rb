@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
-      resources :users
+      resources :users, :only => [:show, :create, :update]
       resources :user_stocks
       post "/user_recent", to: "user_stocks#user_recent"
       post "/user_all", to: "user_stocks#user_all"
