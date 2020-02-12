@@ -18,7 +18,7 @@ class SignUp extends React.Component{
     
     handleSubmit = (e) => {
         e.preventDefault()
-        fetch("https://dashboard.heroku.com/api/v1/signup", {
+        fetch("https://stockr-api-app.herokuapp.com/api/v1/signup", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

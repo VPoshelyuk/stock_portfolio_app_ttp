@@ -17,7 +17,7 @@ class LogIn extends React.Component{
     
       handleSubmit = (e) => {
         e.preventDefault()
-        fetch("https://dashboard.heroku.com/api/v1/login", {
+        fetch("https://stockr-api-app.herokuapp.com/api/v1/login", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

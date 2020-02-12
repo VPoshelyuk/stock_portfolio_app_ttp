@@ -26,7 +26,7 @@ class Portfolio extends React.Component{
         e.preventDefault()
         let qtyRegex = /^[1-9]\d*$/
         if(qtyRegex.test(e.target[1].value)){
-            fetch("https://dashboard.heroku.com/api/v1/search", {
+            fetch("https://stockr-api-app.herokuapp.com/api/v1/search", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -76,7 +76,7 @@ class Portfolio extends React.Component{
     }
 
     handleConfirmation = (notif) => {
-        fetch("https://dashboard.heroku.com/api/v1/user_stocks", {
+        fetch("https://stockr-api-app.herokuapp.com/api/v1/user_stocks", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -104,7 +104,7 @@ class Portfolio extends React.Component{
                     }).show()
                 });
             } else {
-                fetch("https://dashboard.heroku.com/api/v1/user_all", {
+                fetch("https://stockr-api-app.herokuapp.com/api/v1/user_all", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -137,7 +137,7 @@ class Portfolio extends React.Component{
                 }).show()
             }
         })
-        fetch(`https://dashboard.heroku.com/api/v1/users/${this.props.currentUser.id}`, {
+        fetch(`https://stockr-api-app.herokuapp.com/api/v1/users/${this.props.currentUser.id}`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",

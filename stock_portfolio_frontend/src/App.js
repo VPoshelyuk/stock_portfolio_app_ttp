@@ -21,7 +21,7 @@ class App extends React.Component {
   componentDidMount(){
     const token = localStorage.token
     if(token){
-      fetch("https://dashboard.heroku.com/api/v1/auto_login", {
+      fetch("https://stockr-api-app.herokuapp.com/api/v1/auto_login", {
         headers: {
           "authorization": token
         }
