@@ -29,7 +29,7 @@ class SellComponent extends React.Component{
     }
 
     handleConfirm = () => {
-        fetch("http://localhost:3000/api/v1/user_stocks", {
+        fetch("https://dashboard.heroku.com/api/v1/user_stocks", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -57,7 +57,7 @@ class SellComponent extends React.Component{
                     }).show()
                 });
             } else {
-                fetch("http://localhost:3000/api/v1/user_all", {
+                fetch("https://dashboard.heroku.com/api/v1/user_all", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -90,7 +90,7 @@ class SellComponent extends React.Component{
                 }).show()
             }
         })
-        fetch(`http://localhost:3000/api/v1/users/${this.props.currentUser.id}`, {
+        fetch(`https://dashboard.heroku.com/api/v1/users/${this.props.currentUser.id}`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",

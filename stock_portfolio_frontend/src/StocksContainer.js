@@ -14,7 +14,7 @@ class StocksContainer extends React.Component{
     }
     componentDidMount(){
         if(this.props.mode === "portfolio"){
-            fetch("http://localhost:3000/api/v1/user_all", {
+            fetch("https://dashboard.heroku.com/api/v1/user_all", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -42,7 +42,7 @@ class StocksContainer extends React.Component{
                 }
             })
         }else if(this.props.mode === "transactions"){
-            fetch("http://localhost:3000/api/v1/user_recent", {
+            fetch("https://dashboard.heroku.com/api/v1/user_recent", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
