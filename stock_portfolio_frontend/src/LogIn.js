@@ -1,6 +1,4 @@
 import React from "react";
-import PasswordMask from 'react-password-mask';
-
 import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { setUser } from './redux/actions/user_actions'
@@ -32,7 +30,7 @@ class LogIn extends React.Component{
           if (response.errors){
             alert(response.errors)
           } else {
-            this.props.setUser(response)
+            this.props.setUser(response.user)
             localStorage.token = response.token
           }
         })
@@ -40,7 +38,7 @@ class LogIn extends React.Component{
 
     render(){
         return (
-        <div className="login_main">
+        <div className="main_card">
             <p className="form_name" align="center" >Log In</p>
             <form className="reg_form" onSubmit={this.handleSubmit}>
                 <input 

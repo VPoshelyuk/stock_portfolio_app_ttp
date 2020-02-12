@@ -9,11 +9,11 @@ function NavBar (props) {
                 <Link to="/"><img className="logo" src="./images/nav_logo.png" alt="NavBar logo"/></Link>
                 <nav>
                     <ul>
-                        <li>
-                        <Link to="/">Home</Link>
-                        </li>
-                        {props.currentUser === null ?
+                        {!localStorage.token && !props.currentUser?
                         <Fragment>
+                            <li>
+                                <Link to="/">Home</Link>
+                            </li>
                             <li>
                             <Link to="/login">Log In</Link>
                             </li>
@@ -24,7 +24,10 @@ function NavBar (props) {
                         :
                         <Fragment>
                             <li>
-                            <Link to="/profile">Profile</Link>
+                                <Link to="/">Portfolio</Link>
+                            </li>
+                            <li>
+                            <Link to="/transactions">Transactions</Link>
                             </li>
                             <li>
                             <Link to="/logout">Log Out</Link>

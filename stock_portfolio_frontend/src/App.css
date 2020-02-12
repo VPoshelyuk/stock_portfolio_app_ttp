@@ -4,9 +4,28 @@
 
 body {
   margin: 0;
-  background: rgb(202, 202, 202);
+  background: rgb(224, 224, 224);
   font-family: 'Indie Flower', cursive;
   font-size: 3vh;
+}
+
+button {
+  margin: auto 10px;
+  background: transparent;
+  -webkit-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+  color: #41403e;
+  font-size: 12px;
+  font-family: 'Indie Flower', cursive;
+  letter-spacing: 1px;
+  outline: none;
+  border: solid 1px #41403e;
+  box-shadow: 20px 38px 34px -26px rgba(0, 0, 0, 0.2);
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+}
+
+button:hover {
+  box-shadow: 2px 8px 4px -6px rgba(0, 0, 0, 0.3);
 }
 
 header {
@@ -36,7 +55,7 @@ header::after {
 }
 
 nav {
-  width: 20vw;
+  width: 30vw;
 }
 
 nav ul {
@@ -52,6 +71,7 @@ nav ul {
 
 nav li {
   margin: auto;
+  text-align: center;
 }
 
 nav a {
@@ -79,7 +99,7 @@ nav a:hover::before {
   width: 100%;
 }
 
-.login_main {
+.main_card {
   background-color: white;
   opacity: 90%;
   position: absolute;
@@ -94,7 +114,6 @@ nav a:hover::before {
 }
 
 .reg_form {
-  /* background-color: blue;  */
   width: 90%;
   height: 70%;
   margin: auto;
@@ -128,9 +147,13 @@ nav a:hover::before {
   font-family: 'Indie Flower', cursive;
   letter-spacing: 1px;
   outline: none;
-  border: solid 2px #41403e;
+  border: solid 4px #41403e;
   box-shadow: 20px 38px 34px -26px rgba(0, 0, 0, 0.2);
   border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+}
+
+.submit_button:hover {
+  box-shadow: 2px 8px 4px -6px rgba(0, 0, 0, 0.3);
 }
 
 .form_name {
@@ -139,9 +162,122 @@ nav a:hover::before {
   font-size: 8vh;
 }
 
+.welcome_message {
+  width: 90%;
+  height: 30%;
+  margin: 12% auto;
+  text-align: center; 
+}
+
+.portfolio_main {
+  width: 100vw;
+  height: 92vh;
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+  /* background-color: greenyellow; */
+}
+.stocks_info {
+  width: 60%;
+  height: 80%;
+  margin: auto;
+  border-right: solid 2px #41403e;
+  display: flex;
+  flex-flow: column;
+  justify-content: flex-start;
+}
+.buy_info {
+  width: 40%;
+  height: 100%;
+}
+
+.buy_form {
+  height: 100%;
+  margin: auto;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+}
+
+.stock_container {
+  width: 90%;
+  margin: auto;
+  margin-top: 0;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+}
+
+.stock_container::-webkit-scrollbar {
+  display: none;
+}
+
+.stock_card {
+  position: relative;
+  border-bottom: solid 2px black;
+  width: 100%;
+  height: 15vh;
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+}
+
+.stock_info {
+  align-self: center;
+  font-size: 3vw;
+  font-weight: bold;
+  margin: auto 1vw;
+}
+
+.popup_wrap {
+  position: fixed;
+  z-index: 2;
+  top: 8vh;
+  left: 0;
+  width: 100vw;
+  height: 92vh;
+  background-color: transparent;
+}
+
+.sell_card {
+  position: fixed;
+  z-index: 20;
+  background-color: white;
+  top:15vh;
+  left:15vw;
+  opacity: 95%;
+  width: 70vw;
+  height: 70vh;
+  border: solid black 2px;
+  outline: none;
+  box-shadow: 20px 38px 34px -26px rgba(0, 0, 0, 0.2);
+  border-radius: 255px 5px 225px 5px/5px 225px 5px 255px;
+}
+
+.sell_info {
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+  justify-content: center;
+}
+
+.sell_form_name {
+  margin: 2vh auto;
+  font-size: 7vh;
+}
+
+
 @media screen and (max-width: 900px) {
   nav {
-    width: 40vw;
+    width: 55vw;
+  }
+  p {
+    font-size: 2vh;
+  }
+  .container{
+    width: 100%;
+  }
+  .sell_form_name {
+    font-size: 3vh;
   }
 }
 
@@ -155,5 +291,21 @@ nav a:hover::before {
   }
   nav {
     width: 100vw;
+  }
+  .buy_info{
+    padding-top: 20vh;
+    width: 100%;
+  }
+  .stocks_info {
+    border: none;
+    width: 100%;
+  }
+  .stock_info {
+    font-size: 5vw;
+  }
+  .portfolio_main {
+    width: 100%;
+    padding-top: 8vh;
+    flex-flow: column-reverse;
   }
 }

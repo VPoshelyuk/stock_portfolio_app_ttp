@@ -12,7 +12,8 @@ import Home from './Home'
 import LogIn from './LogIn'
 import SignUp from './SignUp'
 import LogOut from './LogOut'
-import Profile from './Profile'
+import Portfolio from './Portfolio'
+import Transactions from './Transactions'
 
 import '../src/App.css'
 
@@ -30,7 +31,7 @@ class App extends React.Component {
         if (response.errors){
           alert(response.errors)
         } else {
-          this.props.setUser(response)
+          this.props.setUser(response.user)
           localStorage.token = response.token
         }
       })
@@ -39,36 +40,46 @@ class App extends React.Component {
 
   render() {
     return (
-      <Router>
-        <NavBar />
-        <Route path="/logout">
-            <LogOut/>
-        </Route>
-        <Route path="/login">
-          {this.props.currentUser === null ?
-            <LogIn/>
-            :
-            <Redirect to="/" />
-          }
-        </Route>
-        <Route path="/signup">
-          {this.props.currentUser === null ?
-            <SignUp/>
-            :
-            <Redirect to="/" />
-          }
-        </Route>
-        <Route path="/profile">
-            {this.props.currentUser !== null ?
-                <Profile />
+      <Fragment>
+      {this.props.currentUser || !localStorage.token?
+        <Router>
+          <NavBar />
+          <Route path="/logout">
+              <LogOut/>
+          </Route>
+          <Route path="/login">
+              {!this.props.currentUser ?
+                <LogIn/>
                 :
                 <Redirect to="/" />
-            }
-        </Route>
-        <Route path="/">
-            <Home/>
-        </Route>
-      </Router>
+              }
+          </Route>
+          <Route path="/signup">
+              {!this.props.currentUser ?
+                <SignUp/>
+                :
+                <Redirect to="/" />
+              }
+          </Route>
+          <Route path="/transactions">
+              {this.props.currentUser ?
+                  <Transactions />
+                  :
+                  <Redirect to="/" />
+              }
+          </Route>
+          <Route exact path="/">
+              {this.props.currentUser?
+                  <Portfolio />
+                  :
+                  <Home/>
+              }
+          </Route>
+        </Router>
+        :
+        <h1 align="center">Loading...</h1>
+      }
+      </Fragment>
     );
   }
 }
