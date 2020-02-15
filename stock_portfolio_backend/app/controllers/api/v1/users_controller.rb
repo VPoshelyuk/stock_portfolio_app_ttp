@@ -15,10 +15,10 @@ class Api::V1::UsersController < ApplicationController
         end
     end
 
-    def update
-        user = User.update(user_params)
-        if user
-            render json: {new_balance: user[0]["balance"]}
+    def update_balance
+        user = User.update(params[:id], balance: params[:balance])
+        if user.save
+            render json: {new_balance: user["balance"]}
         else
             render json: { errors: user.errors.full_messages }
         end
@@ -27,6 +27,6 @@ class Api::V1::UsersController < ApplicationController
     private
 
     def user_params
-        params.permit(:user_id, :name, :email, :password, :balance)
+        params.permit(:id, :name, :email, :password, :balance)
     end
 end

@@ -51,7 +51,10 @@ header::after {
 }
 
 .logo {
-  height: 8vh;
+  margin-top: 0.125vh;
+  height: 7.5vh;
+  border: solid 1px #41403e;
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
 }
 
 nav {

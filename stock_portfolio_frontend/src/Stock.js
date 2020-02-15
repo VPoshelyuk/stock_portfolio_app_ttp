@@ -1,49 +1,36 @@
-import React, {Fragment} from "react";
-import { Redirect } from 'react-router-dom'
+import React, {Fragment, useState} from "react";
 import { connect } from 'react-redux'
-import { setUser, updatePortfolio } from './redux/actions/user_actions'
-
-import Noty from 'noty';  
-import "../node_modules/noty/lib/noty.css";  
-import "../node_modules/noty/lib/themes/mint.css";
+import { setUser} from './redux/actions/user_actions'
 
 import SellComponent from './SellComponent'
 
-class Stock extends React.Component{
-    state = {
-        triggerComponent: false
-    }
+const Stock = ({stock, mode}) => {
+    const [triggerComponent, setTriggerComponent] = useState(false)
 
-    triggerPopUp = () => {
-        this.setState({
-            triggerComponent: !this.state.triggerComponent
-        })
+    const triggerPopUp = () => {
+        setTriggerComponent(!triggerComponent)
     }
-
-    render(){
-        console.log(this.props)
-        return (
+    return (
         <Fragment>
-            {this.props.mode === "portfolio"?
+            {mode === "portfolio"?
                 <Fragment>
-                    <div className="stock_card" onClick={this.triggerPopUp}>
-                        <p className="stock_info">{this.props.stock.ticker} - {this.props.stock.quantity} Shares</p>
-                        <p className="stock_info" style={{color: `${this.props.stock.color}`}}>${this.props.stock.value}</p>
+                    <div className="stock_card" onClick={triggerPopUp}>
+                        <p className="stock_info">{stock.ticker} - {stock.quantity} Shares</p>
+                        <p className="stock_info" style={{color: `${stock.color}`}}>${stock.value}</p>
                     </div>
-                    {this.state.triggerComponent ?
-                        <SellComponent stock={this.props.stock} triggerPopUp={this.triggerPopUp} /> :
+                    {triggerComponent ?
+                        <SellComponent stock={stock} triggerPopUp={triggerPopUp} /> :
                         null
                     }
                 </Fragment>
                 :
                 <div className="stock_card">
-                    <p className="stock_info">{this.props.stock.status} ({this.props.stock.ticker}) -</p>
-                    <p className="stock_info">{this.props.stock.quantity} Shares @ {this.props.stock.price}</p>
+                    <p className="stock_info">{stock.status} ({stock.ticker}) -</p>
+                    <p className="stock_info">{stock.quantity} Shares @ {stock.price}</p>
                 </div>
             }
         </Fragment>
-        );
-    }
+    );
 }
 
 function msp(state){

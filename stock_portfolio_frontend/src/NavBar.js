@@ -2,14 +2,14 @@ import React, {Fragment} from 'react';
 import { Link } from "react-router-dom";
 import { connect } from 'react-redux'
 
-function NavBar (props) {
+const NavBar = ({currentUser}) => {
     return (
         <header>
             <div className="container">
                 <Link to="/"><img className="logo" src="./images/nav_logo.png" alt="NavBar logo"/></Link>
                 <nav>
                     <ul>
-                        {!localStorage.token && !props.currentUser?
+                        {!localStorage.token && !currentUser?
                         <Fragment>
                             <li>
                                 <Link to="/">Home</Link>

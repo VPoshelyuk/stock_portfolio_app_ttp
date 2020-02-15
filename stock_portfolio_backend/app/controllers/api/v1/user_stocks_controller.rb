@@ -18,7 +18,6 @@ class Api::V1::UserStocksController < ApplicationController
                 elsif(stock['status'] == "SELL")
                     quantity = quantity - stock['quantity'].to_i
                 end
-                puts quantity
             else
                 url = URI("https://cloud.iexapis.com/stable/stock/#{stock['ticker']}/quote?token=#{Rails.application.credentials[:iex_token]}&filter=companyName,symbol,latestPrice,previousClose,change,avgTotalVolume")
                 http = Net::HTTP.new(url.host, url.port)
@@ -38,11 +37,10 @@ class Api::V1::UserStocksController < ApplicationController
                 end
 
                 value = quantity * data['latestPrice'].to_f.round(2)
-                puts "#{quantity} here"
                 color = "gray"
-                if(data['change'] > 0)
+                if(data['change'].to_f > 0)
                     color = "green"
-                elsif(data['change'] < 0)
+                elsif(data['change'].to_f < 0)
                     color = "red"
                 end
                     ret_val.push(

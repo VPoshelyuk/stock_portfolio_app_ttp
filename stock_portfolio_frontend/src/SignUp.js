@@ -1,5 +1,4 @@
 import React from "react";
-import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { setUser } from './redux/actions/user_actions'
 
@@ -14,7 +13,7 @@ class SignUp extends React.Component{
         this.setState({
             [event.target.name]: event.target.value
         })
-      }
+    }
     
     handleSubmit = (e) => {
         e.preventDefault()
@@ -43,10 +42,38 @@ class SignUp extends React.Component{
             <div className="main_card">
             <p className="form_name" align="center" >Sign Up</p>
             <form className="reg_form" onSubmit={this.handleSubmit}>
-                <input className="input" type="text" name="name" value={this.state.name} onChange={this.handleChange} placeholder="Name" />
-                <input className="input" type="text" name="email" value={this.state.email} onChange={this.handleChange} placeholder="Email" />
-                <input className="input" type="password" name="password" value={this.state.password} onChange={this.handleChange} placeholder="Password" />
-                <input className="submit_button" type="submit" value="Sign Up" />
+                <input 
+                    className="input" 
+                    type="text" 
+                    name="name" 
+                    value={this.state.name} 
+                    onChange={this.handleChange} 
+                    placeholder="Name" 
+                />
+                <input 
+                    className="input" 
+                    type="email" 
+                    name="email" 
+                    pattern="\A[a-z0-9!#$%&'*+/=?^_‘{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_‘{|}~-]+)*@
+                    (?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\z"
+                    value={this.state.email} 
+                    onChange={this.handleChange} 
+                    placeholder="Email" 
+                    required
+                />
+                <input 
+                    className="input" 
+                    type="password" 
+                    name="password" 
+                    value={this.state.password} 
+                    onChange={this.handleChange} 
+                    placeholder="Password" 
+                />
+                <input 
+                    className="submit_button" 
+                    type="submit" 
+                    value="Sign Up" 
+                />
             </form>
         </div>
         );

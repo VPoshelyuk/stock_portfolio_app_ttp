@@ -1,11 +1,8 @@
-import React, {Fragment} from "react";
-import { Redirect } from "react-router-dom"
+import React, {Fragment} from "react"
 import { connect } from 'react-redux'
-import { setUser, updateBalance, updatePortfolio } from './redux/actions/user_actions'
+import { setUser, updateBalance, updatePortfolio, updateTransactions } from './redux/actions/user_actions'
 
-import Noty from 'noty';  
-import "../node_modules/noty/lib/noty.css";  
-import "../node_modules/noty/lib/themes/mint.css";
+import notification from "./misc/Notification"
 
 import StocksContainer from './StocksContainer'
 
@@ -24,8 +21,13 @@ class Portfolio extends React.Component{
 
     handleSubmit = (e) => {
         e.preventDefault()
+        let tickerRegex = /^[a-zA-Z0-9]*$/
         let qtyRegex = /^[1-9]\d*$/
-        if(qtyRegex.test(e.target[1].value)){
+        if(!tickerRegex.test(e.target[0].value)){
+            notification("Ticker symbol should consist of</br> letters and/or numbers only!")
+        }else if(!qtyRegex.test(e.target[1].value)){
+            notification("Quantity should be a whole positive number!")
+        }else{
             fetch("https://stockr-api-app.herokuapp.com/api/v1/search", {
                 method: "POST",
                 headers: {
@@ -36,16 +38,8 @@ class Portfolio extends React.Component{
             })
             .then(res => res.json())
             .then(response => {
-                console.log(response)
                 if(response.error){
-                    new Noty({  
-                        text: `${response.error}`,
-                        layout: "bottomRight",
-                        type: "alert",
-                        timeout: 5000,
-                        progressBar: false,
-                        closeWith: ["click", "button"]
-                    }).show()
+                    notification(response.error)
                 } else {
                     this.setState({
                         current_buy: {
@@ -53,25 +47,10 @@ class Portfolio extends React.Component{
                             new_balance: response.new_balance
                         }
                     })
-                    let notif = new Noty({  
-                        text: `${response.message}`,
-                        layout: "bottomRight",
-                        buttons: [
-                            Noty.button('YES', 'btn btn-success', () => this.handleConfirmation(notif)),
-                            Noty.button('NO', 'btn btn-error', function () {notif.close()})
-                          ]
-                      }).show()
+                    notification(response.message, "confirm", this.handleConfirmation)
                 }
             })
-        }else{
-            new Noty({  
-                text: `Quantity should be a whole positive number`,
-                layout: "bottomRight",
-                type: "alert",
-                timeout: 5000,
-                progressBar: false,
-                closeWith: ["click", "button"]
-            }).show()
+
         }
     }
 
@@ -94,56 +73,21 @@ class Portfolio extends React.Component{
         .then(response => {
             if(response.errors){
                 response.errors.forEach(error => {
-                    new Noty({  
-                        text: `${error}`,
-                        layout: "bottomRight",
-                        type: "alert",
-                        timeout: 5000,
-                        progressBar: false,
-                        closeWith: ["click", "button"]
-                    }).show()
+                    notification(error)
                 });
             } else {
-                fetch("https://stockr-api-app.herokuapp.com/api/v1/user_all", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Accept": "application/json"
-                    },
-                    body: JSON.stringify({user_id: this.props.currentUser.id})
-                })
-                .then(res => res.json())
-                .then(resp => {
-                    if(resp.error){
-                        new Noty({  
-                            text: `${resp.error}`,
-                            layout: "bottomRight",
-                            type: "alert",
-                            timeout: 5000,
-                            progressBar: false,
-                            closeWith: ["click", "button"]
-                        }).show()
-                    } else {
-                        this.props.updatePortfolio(resp)
-                    }
-                })
-                new Noty({  
-                    text: `Successfully bought ${this.state.quantity} stocks of ${this.state.ticker}`,
-                    layout: "bottomRight",
-                    type: "success",
-                    timeout: 5000,
-                    progressBar: false,
-                    closeWith: ["click", "button"]
-                }).show()
+                notification(`Successfully bought ${this.state.quantity} stocks of ${this.state.ticker.toUpperCase()}`)
+                this.props.updateTransactions(response)
             }
         })
-        fetch(`https://stockr-api-app.herokuapp.com/api/v1/users/${this.props.currentUser.id}`, {
+        fetch(`https://stockr-api-app.herokuapp.com/api/v1/update_balance`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json"
             },
             body: JSON.stringify({
+                id: this.props.currentUser.id,
                 balance: this.state.current_buy.new_balance
             })
         })
@@ -151,14 +95,7 @@ class Portfolio extends React.Component{
         .then(response => {
             if(response.errors){
                 response.errors.forEach(error => {
-                    new Noty({  
-                        text: `${error}`,
-                        layout: "bottomRight",
-                        type: "alert",
-                        timeout: 5000,
-                        progressBar: false,
-                        closeWith: ["click", "button"]
-                    }).show()
+                    notification(error)
                 });
             } else {
                 this.props.updateBalance(response.new_balance)
@@ -215,4 +152,4 @@ function msp(state){
     }
   }
   
-  export default connect(msp, {setUser, updateBalance, updatePortfolio})(Portfolio)
+  export default connect(msp, {setUser, updateBalance, updatePortfolio, updateTransactions })(Portfolio)

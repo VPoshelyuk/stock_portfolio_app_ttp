@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react"
 import {
   BrowserRouter as Router,
   Route,
@@ -17,8 +17,9 @@ import Transactions from './Transactions'
 
 import '../src/App.css'
 
-class App extends React.Component {
-  componentDidMount(){
+const App = ({setUser, currentUser}) => {
+
+  useEffect(() => {
     const token = localStorage.token
     if(token){
       fetch("https://stockr-api-app.herokuapp.com/api/v1/auto_login", {
@@ -31,57 +32,56 @@ class App extends React.Component {
         if (response.errors){
           alert(response.errors)
         } else {
-          this.props.setUser(response.user)
+          setUser(response.user)
           localStorage.token = response.token
         }
       })
     }
-  }
+  }, [])
 
-  render() {
-    return (
-      <Fragment>
-      {this.props.currentUser || !localStorage.token?
-        <Router>
-          <NavBar />
-          <Route path="/logout">
-              <LogOut/>
-          </Route>
-          <Route path="/login">
-              {!this.props.currentUser ?
-                <LogIn/>
+  return (
+    <Fragment>
+    {currentUser || !localStorage.token?
+      <Router>
+        <NavBar />
+        <Route path="/logout">
+            <LogOut/>
+        </Route>
+        <Route path="/login">
+            {!currentUser ?
+              <LogIn/>
+              :
+              <Redirect to="/" />
+            }
+        </Route>
+        <Route path="/signup">
+            {!currentUser ?
+              <SignUp/>
+              :
+              <Redirect to="/" />
+            }
+        </Route>
+        <Route path="/transactions">
+            {currentUser ?
+                <Transactions />
                 :
                 <Redirect to="/" />
-              }
-          </Route>
-          <Route path="/signup">
-              {!this.props.currentUser ?
-                <SignUp/>
+            }
+        </Route>
+        <Route exact path="/">
+            {currentUser?
+                <Portfolio />
                 :
-                <Redirect to="/" />
-              }
-          </Route>
-          <Route path="/transactions">
-              {this.props.currentUser ?
-                  <Transactions />
-                  :
-                  <Redirect to="/" />
-              }
-          </Route>
-          <Route exact path="/">
-              {this.props.currentUser?
-                  <Portfolio />
-                  :
-                  <Home/>
-              }
-          </Route>
-        </Router>
-        :
-        <h1 align="center">Loading...</h1>
-      }
-      </Fragment>
-    );
-  }
+                <Home/>
+            }
+        </Route>
+      </Router>
+      :
+      <h1 align="center">Loading...</h1>
+    }
+    </Fragment>
+  );
+
 }
 
 function msp(state){
