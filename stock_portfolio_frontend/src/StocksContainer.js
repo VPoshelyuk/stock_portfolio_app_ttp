@@ -7,12 +7,12 @@ import Stock from "./Stock";
 
 const StocksContainer = ({ currentUser, portfolio, updatePortfolio, transactions, setTransactions, mode}) => {
     const [loaded, setLoaded] = useState(false)
-    const dependence = mode === "portfolio" ? 
+    const dependencies = mode === "portfolio" ? 
         ["user_all", transactions, updatePortfolio]
         : 
         ["user_recent", null, setTransactions]
     useEffect(() => {
-        fetch(`https://stockr-api-app.herokuapp.com/api/v1/${dependence[0]}`, {
+        fetch(`https://stockr-api-app.herokuapp.com/api/v1/${dependencies[0]}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -25,12 +25,12 @@ const StocksContainer = ({ currentUser, portfolio, updatePortfolio, transactions
             if(response.error){
                 notification(response.error)
             } else {
-                dependence[2](response)
+                dependencies[2](response)
                 setLoaded(true)
             }
         })
     // eslint-disable-next-line
-    }, [dependence[1]])
+    }, [dependencies[1]])
 
     return (
         <div className="stock_container">
