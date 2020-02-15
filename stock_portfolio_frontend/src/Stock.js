@@ -14,9 +14,11 @@ const Stock = ({stock, mode}) => {
         <Fragment>
             {mode === "portfolio"?
                 <Fragment>
-                    <div className="stock_card" onClick={triggerPopUp}>
+                    <div className="stock_card" style={{cursor: "pointer"}} onClick={triggerPopUp}>
                         <p className="stock_info">{stock.ticker} - {stock.quantity} Shares</p>
-                        <p className="stock_info" style={{color: `${stock.color}`}}>${stock.value}</p>
+                        <h1 className="stock_info" style={{color: `${stock.color}`}} align="center">${stock.value} 
+                            <p style={{fontSize: "17px", margin: "0"}}>@{stock.current_price} per share</p>
+                        </h1>
                     </div>
                     {triggerComponent ?
                         <SellComponent stock={stock} triggerPopUp={triggerPopUp} /> :

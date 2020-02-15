@@ -22,6 +22,15 @@ const newNotification = (text, type = "alert", execFunction) => {
                 ]
         }).show()
         return notif
+    }else if(type === "intro"){
+        return new Noty({  
+            text: `${text}`,
+            layout: "topCenter",
+            type: "error",
+            timeout: 3000,
+            progressBar: true,
+            closeWith: ["click", "button"]
+        }).show()
     }
 
 }

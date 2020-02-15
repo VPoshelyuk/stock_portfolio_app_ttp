@@ -11,6 +11,7 @@ const StocksContainer = ({ currentUser, portfolio, updatePortfolio, transactions
         ["user_all", transactions, updatePortfolio]
         : 
         ["user_recent", null, setTransactions]
+        
     useEffect(() => {
         fetch(`https://stockr-api-app.herokuapp.com/api/v1/${dependencies[0]}`, {
             method: "POST",

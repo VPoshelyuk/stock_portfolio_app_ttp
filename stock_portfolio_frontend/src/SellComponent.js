@@ -17,50 +17,41 @@ const SellComponent = ({currentUser, updateBalance, updateTransactions, stock, t
 
     const handleConfirm = () => {
         if(availableStocks > 0){
-            fetch("https://stockr-api-app.herokuapp.com/api/v1/user_stocks", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json"
-                },
-                body: JSON.stringify({
-                    user_id: currentUser.id,
-                    ticker: stock.ticker,
-                    quantity: availableStocks,
-                    price: stock.current_price,
-                    status: "SELL"
+            Promise.all([
+                fetch("https://stockr-api-app.herokuapp.com/api/v1/user_stocks", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                    },
+                    body: JSON.stringify({
+                        user_id: currentUser.id,
+                        ticker: stock.ticker,
+                        quantity: availableStocks,
+                        price: stock.current_price,
+                        status: "SELL"
+                    })
+                }),
+                fetch(`https://stockr-api-app.herokuapp.com/api/v1/update_balance`, {
+                    method: "PATCH",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                    },
+                    body: JSON.stringify({
+                        id: currentUser.id,
+                        balance: (parseFloat(currentUser.balance) + availableStocks * parseFloat(stock.current_price)).toFixed(2)
+                    })
                 })
+            ])
+            .then(([stocks, balance]) => Promise.all([stocks.json(), balance.json()]))
+            .then(([stocks, balance]) => {
+                updateTransactions(stocks)
+                updateBalance(balance.new_balance)
+
             })
-            .then(res => res.json())
-            .then(response => {
-                if(response.errors){
-                    response.errors.forEach(error => {
-                        notification(error)
-                    });
-                } else {
-                    updateTransactions(response)
-                }
-            })
-            fetch(`https://stockr-api-app.herokuapp.com/api/v1/update_balance`, {
-                method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json"
-                },
-                body: JSON.stringify({
-                    id: currentUser.id,
-                    balance: (parseFloat(currentUser.balance) + availableStocks * parseFloat(stock.current_price)).toFixed(2)
-                })
-            })
-            .then(res => res.json())
-            .then(response => {
-                if(response.errors){
-                    response.errors.forEach(error => {
-                        notification(error)
-                    });
-                } else {
-                    updateBalance(response.new_balance)
-                }
+            .catch(error => {
+                notification(error)
             })
         }
         triggerPopUp()

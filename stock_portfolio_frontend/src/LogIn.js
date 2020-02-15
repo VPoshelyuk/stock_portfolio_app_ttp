@@ -2,6 +2,8 @@ import React from "react"
 import { connect } from 'react-redux'
 import { setUser } from './redux/actions/user_actions'
 
+import notification from "./misc/Notification"
+
 class LogIn extends React.Component{
   state = {
     email: "",
@@ -22,12 +24,15 @@ class LogIn extends React.Component{
         "Content-Type": "application/json",
         "Accept": "application/json"
       },
-      body: JSON.stringify(this.state)
+      body: JSON.stringify({
+        email: this.state.email.toLowerCase(),
+        password: this.state.password
+      })
     })
     .then(res => res.json())
     .then(response => {
       if (response.errors){
-        alert(response.errors)
+        notification(response.errors, "intro")
       } else {
         this.props.setUser(response.user)
         localStorage.token = response.token
@@ -42,7 +47,7 @@ class LogIn extends React.Component{
           <form className="reg_form" onSubmit={this.handleSubmit}>
               <input 
                 className="input" 
-                type="text" 
+                type="email" 
                 name="email" 
                 value={this.state.email} 
                 onChange={this.handleChange} 

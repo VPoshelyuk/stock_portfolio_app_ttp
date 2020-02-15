@@ -19,7 +19,7 @@ class BuyComponent extends React.Component {
 
     handleSubmit = (e) => {
         e.preventDefault()
-        let tickerRegex = /^[a-zA-Z0-9]*$/
+        let tickerRegex = /^[a-zA-Z0-9]+$/
         let qtyRegex = /^[1-9]\d*$/
         if(!tickerRegex.test(e.target[0].value)){
             notification("Ticker symbol should consist of</br> letters and/or numbers only!")

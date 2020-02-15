@@ -2,6 +2,8 @@ import React from "react";
 import { connect } from 'react-redux'
 import { setUser } from './redux/actions/user_actions'
 
+import notification from "./misc/Notification"
+
 class SignUp extends React.Component{
     state = {
         name: "",
@@ -23,12 +25,14 @@ class SignUp extends React.Component{
             "Content-Type": "application/json",
             "Accept": "application/json"
         },
-        body: JSON.stringify(this.state)
+        body: JSON.stringify({...this.state, email: this.state.email.toLowerCase()})
         })
         .then(res => res.json())
         .then(response => {
             if(response.errors){
-                alert(response.errors)
+                response.errors.forEach(error => 
+                    notification(error , "intro")
+                )
             } else {
                 this.props.setUser(response.user)
                 localStorage.token = response.token
@@ -53,9 +57,7 @@ class SignUp extends React.Component{
                 <input 
                     className="input" 
                     type="email" 
-                    name="email" 
-                    pattern="\A[a-z0-9!#$%&'*+/=?^_‘{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_‘{|}~-]+)*@
-                    (?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\z"
+                    name="email"
                     value={this.state.email} 
                     onChange={this.handleChange} 
                     placeholder="Email" 
