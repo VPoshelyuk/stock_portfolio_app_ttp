@@ -10,6 +10,10 @@ export function updatePortfolio(portfolio){
     return {type: "UPDATE_PORTFOLIO", payload: {portfolio: portfolio}}
 }
 
-export function updateTransactions(transactions){
-    return {type: "UPDATE_TRANSACTIONS", payload: {transactions: transactions}}
+export function setTransactions(transactions){
+    return {type: "SET_TRANSACTIONS", payload: {transactions: transactions}}
+}
+
+export function updateTransactions(transaction){
+    return {type: "UPDATE_TRANSACTIONS", payload: {transaction: transaction}}
 }

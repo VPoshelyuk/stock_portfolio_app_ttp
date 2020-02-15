@@ -1,11 +1,11 @@
 import React, {Fragment, useState, useEffect} from "react"
 import { connect } from 'react-redux'
-import { updatePortfolio, updateTransactions } from './redux/actions/user_actions'
+import { updatePortfolio, setTransactions } from './redux/actions/user_actions'
 
 import notification from "./misc/Notification"
 import Stock from "./Stock";
 
-const StocksContainer = ({ currentUser, portfolio, updatePortfolio, transactions, updateTransactions, mode}) => {
+const StocksContainer = ({ currentUser, portfolio, updatePortfolio, transactions, setTransactions, mode}) => {
     const [loaded, setLoaded] = useState(false)
 
     useEffect(() => {
@@ -22,11 +22,11 @@ const StocksContainer = ({ currentUser, portfolio, updatePortfolio, transactions
             if(response.error){
                 notification(response.error)
             } else {
-                mode === "portfolio" ? updatePortfolio(response) : updateTransactions(response)
+                mode === "portfolio" ? updatePortfolio(response) : setTransactions(response)
                 setLoaded(true)
             }
         })
-    }, [transactions])
+    }, [mode === "portfolio" ? transactions : null])
 
     return (
         <div className="stock_container">
@@ -53,4 +53,4 @@ function msp(state){
     }
 }
 
-export default connect(msp, { updatePortfolio, updateTransactions })(StocksContainer)
+export default connect(msp, { updatePortfolio, setTransactions })(StocksContainer)

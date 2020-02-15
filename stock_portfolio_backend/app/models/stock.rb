@@ -1,4 +1,3 @@
 class Stock < ApplicationRecord
-    has_many :user_stocks
-    has_many :users, through: :user_stocks
+    # Stock class created to fetch information from external API through the backend
 end

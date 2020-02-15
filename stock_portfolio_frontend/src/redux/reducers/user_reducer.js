@@ -1,7 +1,7 @@
 const defaultState = {
     currentUser: null,
     portfolio: null,
-    transactions: null
+    transactions: []
   }
   
   function userReducer(prevState = defaultState, action){
@@ -21,11 +21,19 @@ const defaultState = {
           ...prevState, 
           portfolio: action.payload.portfolio
         }
+      case "SET_TRANSACTIONS":
+        return {
+          ...prevState, 
+          transactions: action.payload.transactions
+        }
       case "UPDATE_TRANSACTIONS":
-          return {
-            ...prevState, 
-            transactions: action.payload.transactions
-          }
+        return {
+          ...prevState, 
+          transactions: [
+            ...prevState.transactions,
+            action.payload.transaction
+          ]
+        }
       default:
         return prevState
     }
