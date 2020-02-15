@@ -106,6 +106,7 @@ class BuyComponent extends React.Component {
         return (
             <form className="buy_form" onSubmit={this.handleSubmit}>
                 <p className="form_name" align="center" >Cash - ${this.props.currentUser.balance}</p>
+                <div style={{textAlign: "center"}}>
                 <input 
                     className="input"
                     style={{margin: "10px auto"}}
@@ -130,6 +131,7 @@ class BuyComponent extends React.Component {
                     type="submit" 
                     value="Buy" 
                 />
+                </div>
             </form>
         );
     }

@@ -37,6 +37,7 @@ const App = ({setUser, currentUser}) => {
         }
       })
     }
+  // eslint-disable-next-line
   }, [])
 
   return (

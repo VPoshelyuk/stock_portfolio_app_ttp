@@ -10,7 +10,7 @@ const Transactions = ({currentUser}) =>{
                     <StocksContainer mode={"transactions"} />
                 </div>
                 <div className="user_info">
-                    <img className="profile_pic" src="./images/wolf_of_wall_st.jpg" alt="Profile picture"/>
+                    <img className="profile_pic" src="./images/wolf_of_wall_st.jpg" alt="Profile"/>
                     <p className="user_info_text">
                         Hi, {currentUser.name}!<br />
                         Your e-mail: {currentUser.email}<br />
