@@ -1,9 +1,9 @@
 import React from "react";
 import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { setUser } from './redux/actions/user_actions'
+import { setUser } from '../redux/actions/user_actions'
 
-import notification from "./misc/Notification"
+import notification from "../misc/Notification"
 
 const LogOut = ({setUser}) =>{
     setUser(null)

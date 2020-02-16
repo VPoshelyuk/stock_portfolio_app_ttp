@@ -9,11 +9,11 @@ import { setUser } from './redux/actions/user_actions'
 
 import NavBar from './NavBar'
 import Home from './Home'
-import LogIn from './LogIn'
-import SignUp from './SignUp'
-import LogOut from './LogOut'
-import Portfolio from './Portfolio'
-import Transactions from './Transactions'
+import LogIn from './Containers/LogIn'
+import SignUp from './Containers/SignUp'
+import LogOut from './Containers/LogOut'
+import Portfolio from './Containers/Portfolio'
+import Transactions from './Containers/Transactions'
 
 import '../src/App.css'
 

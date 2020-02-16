@@ -1,8 +1,8 @@
 import React, {useState} from "react"
 import { connect } from 'react-redux'
-import { updateBalance, updateTransactions } from './redux/actions/user_actions'
+import { updateBalance, updateTransactions } from '../redux/actions/user_actions'
 
-import notification from "./misc/Notification"
+import notification from "../misc/Notification"
 
 const SellComponent = ({currentUser, updateBalance, updateTransactions, stock, triggerPopUp}) => {
     const [availableStocks, setAvailableStocks] = useState(0)
@@ -28,7 +28,7 @@ const SellComponent = ({currentUser, updateBalance, updateTransactions, stock, t
                         user_id: currentUser.id,
                         ticker: stock.ticker,
                         quantity: availableStocks,
-                        price: stock.current_price,
+                        price: stock.price,
                         status: "SELL"
                     })
                 }),
@@ -40,7 +40,7 @@ const SellComponent = ({currentUser, updateBalance, updateTransactions, stock, t
                     },
                     body: JSON.stringify({
                         id: currentUser.id,
-                        balance: (parseFloat(currentUser.balance) + availableStocks * parseFloat(stock.current_price)).toFixed(2)
+                        balance: (parseFloat(currentUser.balance) + availableStocks * parseFloat(stock.price)).toFixed(2)
                     })
                 })
             ])
@@ -64,7 +64,7 @@ const SellComponent = ({currentUser, updateBalance, updateTransactions, stock, t
                 <p className="sell_form_name" align="center" >Do you really want to sell this stock?</p>
                 <p align="center">
                 The stork you chose to sell is: {stock.companyName}({stock.ticker})<br />
-                Current price for this stock is: ${stock.current_price}<br />
+                Current price for this stock is: ${stock.price}<br />
                 You have {stock.quantity} available.
                 </p>
                 <div className="sell_wrap">
@@ -73,7 +73,7 @@ const SellComponent = ({currentUser, updateBalance, updateTransactions, stock, t
                         <p style={{fontSize: "2rem", margin: "0 2vw"}}>{availableStocks}</p>
                         <button style={{fontSize: "1.5rem"}} onClick={handleChange}>+</button>
                     </div>
-                    <h1 align="center">You will earn: ${(availableStocks * parseFloat(stock.current_price)).toFixed(2)}</h1>
+                    <h1 align="center">You will earn: ${(availableStocks * parseFloat(stock.price)).toFixed(2)}</h1>
                     <div className="sell_buttons">
                         <button style={{fontSize: "1.5rem"}} onClick={handleConfirm}>Confirm</button>
                         <button style={{fontSize: "1.5rem"}} onClick={() => triggerPopUp()}>Cancel</button>

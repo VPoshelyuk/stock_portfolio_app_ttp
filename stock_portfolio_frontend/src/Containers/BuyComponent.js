@@ -1,8 +1,8 @@
 import React from "react"
 import { connect } from 'react-redux'
-import { setUser, updateBalance, updatePortfolio, updateTransactions } from './redux/actions/user_actions'
+import { setUser, updateBalance, updatePortfolio, updateTransactions } from '../redux/actions/user_actions'
 
-import notification from "./misc/Notification"
+import notification from "../misc/Notification"
 
 class BuyComponent extends React.Component {
     state = {
@@ -53,52 +53,47 @@ class BuyComponent extends React.Component {
     }
 
     handleConfirmation = (notif) => {
-        fetch("https://stockr-api-app.herokuapp.com/api/v1/user_stocks", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            },
-            body: JSON.stringify({
-                user_id: this.props.currentUser.id,
-                ticker: this.state.ticker.toUpperCase(),
-                quantity: this.state.quantity,
-                price: this.state.current_buy.stock_info.latestPrice,
-                status: "BUY"
+        Promise.all([
+            fetch("https://stockr-api-app.herokuapp.com/api/v1/user_stocks", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify({
+                    user_id: this.props.currentUser.id,
+                    ticker: this.state.ticker.toUpperCase(),
+                    quantity: this.state.quantity,
+                    price: this.state.current_buy.stock_info.latestPrice,
+                    status: "BUY"
+                })
+            }),
+            fetch(`https://stockr-api-app.herokuapp.com/api/v1/update_balance`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify({
+                    id: this.props.currentUser.id,
+                    balance: this.state.current_buy.new_balance
+                })
             })
-        })
-        .then(res => res.json())
-        .then(response => {
-            if(response.errors){
-                response.errors.forEach(error => {
-                    notification(error)
-                });
-            } else {
-                notification(`Successfully bought ${this.state.quantity} stocks of ${this.state.ticker.toUpperCase()}`)
-                this.props.updateTransactions(response)
-            }
-        })
-        fetch(`https://stockr-api-app.herokuapp.com/api/v1/update_balance`, {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            },
-            body: JSON.stringify({
-                id: this.props.currentUser.id,
-                balance: this.state.current_buy.new_balance
+        ])
+        .then(([stocks, balance]) => Promise.all([stocks.json(), balance.json()]))
+        .then(([stocks, balance]) => {
+            notif.close()
+            notification(`Successfully bought ${this.state.quantity} stocks of ${this.state.ticker.toUpperCase()}`)
+            this.props.updateTransactions(stocks)
+            this.props.updateBalance(balance.new_balance)
+            this.setState({
+                ticker: "",
+                quantity: ""
             })
+
         })
-        .then(res => res.json())
-        .then(response => {
-            if(response.errors){
-                response.errors.forEach(error => {
-                    notification(error)
-                });
-            } else {
-                this.props.updateBalance(response.new_balance)
-                notif.close()
-            }
+        .catch(error => {
+            notification(error)
         })
     }
 

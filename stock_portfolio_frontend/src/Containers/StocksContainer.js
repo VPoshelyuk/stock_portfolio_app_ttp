@@ -1,8 +1,8 @@
 import React, {Fragment, useState, useEffect} from "react"
 import { connect } from 'react-redux'
-import { updatePortfolio, setTransactions } from './redux/actions/user_actions'
+import { updatePortfolio, setTransactions } from '../redux/actions/user_actions'
 
-import notification from "./misc/Notification"
+import notification from "../misc/Notification"
 import Stock from "./Stock";
 
 const StocksContainer = ({ currentUser, portfolio, updatePortfolio, transactions, setTransactions, mode}) => {
@@ -11,7 +11,7 @@ const StocksContainer = ({ currentUser, portfolio, updatePortfolio, transactions
         ["user_all", transactions, updatePortfolio]
         : 
         ["user_recent", null, setTransactions]
-        
+
     useEffect(() => {
         fetch(`https://stockr-api-app.herokuapp.com/api/v1/${dependencies[0]}`, {
             method: "POST",

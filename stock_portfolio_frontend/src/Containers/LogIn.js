@@ -1,8 +1,8 @@
 import React from "react"
 import { connect } from 'react-redux'
-import { setUser } from './redux/actions/user_actions'
+import { setUser } from '../redux/actions/user_actions'
 
-import notification from "./misc/Notification"
+import notification from "../misc/Notification"
 
 class LogIn extends React.Component{
   state = {

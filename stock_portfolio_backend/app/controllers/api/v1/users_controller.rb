@@ -8,6 +8,7 @@ class Api::V1::UsersController < ApplicationController
     def create
         user = User.create(user_params)
         if user.save
+            UserPortfolio.create(user_id: user.id)
             token = encode_token(user.id)
             render json: {user: user, token: token}
         else
