@@ -1,6 +1,6 @@
 import React from "react"
 import { connect } from 'react-redux'
-import { setUser, updateBalance, updatePortfolio, updateTransactions } from '../redux/actions/user_actions'
+import { setUser, updateBalance } from '../redux/actions/user_actions'
 
 import notification from "../misc/Notification"
 
@@ -21,11 +21,12 @@ class BuyComponent extends React.Component {
         e.preventDefault()
         let tickerRegex = /^[a-zA-Z0-9]+$/
         let qtyRegex = /^[1-9]\d*$/
-        if(!tickerRegex.test(e.target[0].value)){
+        if(!tickerRegex.test(e.target[0].value)){ //Checking if user input for ticker consists of alphanumeric chars only
             notification("Ticker symbol should consist of</br> letters and/or numbers only!")
-        }else if(!qtyRegex.test(e.target[1].value)){
+        }else if(!qtyRegex.test(e.target[1].value)){ //Checking if user input for quantity is a whole positive number
             notification("Quantity should be a whole positive number!")
         }else{
+            // routing request to IEX API through our backend
             fetch("https://stockr-api-app.herokuapp.com/api/v1/search", {
                 method: "POST",
                 headers: {
@@ -53,6 +54,8 @@ class BuyComponent extends React.Component {
     }
 
     handleConfirmation = (notif) => {
+        notif.close() //close confirmation notification window
+        // If purchase confirmed, update user balance
         Promise.all([
             fetch("https://stockr-api-app.herokuapp.com/api/v1/user_stocks", {
                 method: "POST",
@@ -80,17 +83,16 @@ class BuyComponent extends React.Component {
                 })
             })
         ])
-        .then(([stocks, balance]) => Promise.all([stocks.json(), balance.json()]))
-        .then(([stocks, balance]) => {
-            notif.close()
+        .then(([stock, balance]) => balance.json())
+        .then(balance => {
             notification(`Successfully bought ${this.state.quantity} stocks of ${this.state.ticker.toUpperCase()}`)
-            this.props.updateTransactions(stocks)
+            // Update Redux state for user's balance => triggers current portfolio update in StockContainer
+            // to update current portfolio & make prices change dynamically on each sell/buy 
             this.props.updateBalance(balance.new_balance)
             this.setState({
                 ticker: "",
                 quantity: ""
             })
-
         })
         .catch(error => {
             notification(error)
@@ -138,4 +140,4 @@ function msp(state){
     }
 }
 
-export default connect(msp, {setUser, updateBalance, updatePortfolio, updateTransactions })(BuyComponent)
+export default connect(msp, {setUser, updateBalance })(BuyComponent)

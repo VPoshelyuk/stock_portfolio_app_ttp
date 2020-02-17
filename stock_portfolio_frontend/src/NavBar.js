@@ -10,6 +10,7 @@ const NavBar = ({currentUser}) => {
                 <nav>
                     <ul>
                         {!localStorage.token && !currentUser?
+                        // chande navigation bar content depending on if user logged in or not
                         <Fragment>
                             <li>
                                 <Link to="/">Home</Link>

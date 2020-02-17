@@ -13,6 +13,7 @@ const Stock = ({stock, mode}) => {
     return (
         <Fragment>
             {mode === "portfolio"?
+            // depending on the mode passed by parent render different information for card && add ability to sell if it's a portfolio card
                 <Fragment>
                     <div className="stock_card" style={{cursor: "pointer", color: `${stock.color}`}} onClick={triggerPopUp}>
                         <p className="stock_info">{stock.ticker} <span style={{color: "black"}}>- {stock.quantity} Shares</span></p>
@@ -21,7 +22,8 @@ const Stock = ({stock, mode}) => {
                         </h1>
                     </div>
                     {triggerComponent ?
-                        <SellComponent stock={stock} triggerPopUp={triggerPopUp} /> :
+                        <SellComponent stock={stock} triggerPopUp={triggerPopUp} /> 
+                        :
                         null
                     }
                 </Fragment>

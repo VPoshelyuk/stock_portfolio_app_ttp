@@ -1,19 +1,17 @@
 import React, {Fragment, useState, useEffect} from "react"
 import { connect } from 'react-redux'
-import { updatePortfolio, setTransactions } from '../redux/actions/user_actions'
 
 import notification from "../misc/Notification"
 import Stock from "./Stock";
 
-const StocksContainer = ({ currentUser, portfolio, updatePortfolio, transactions, setTransactions, mode}) => {
+const StocksContainer = ({ currentUser, mode}) => {
     const [loaded, setLoaded] = useState(false)
-    const dependencies = mode === "portfolio" ? 
-        ["user_all", transactions, updatePortfolio]
-        : 
-        ["user_recent", null, setTransactions]
+    const [stocks, setStocks] = useState([])
 
     useEffect(() => {
-        fetch(`https://stockr-api-app.herokuapp.com/api/v1/${dependencies[0]}`, {
+        // fetch will depend on mode prop passed to distinguish
+        // calls from transactions page & portolio page
+        fetch(`https://stockr-api-app.herokuapp.com/api/v1/${mode === "portfolio" ? "user_all" : "user_recent"}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -26,22 +24,17 @@ const StocksContainer = ({ currentUser, portfolio, updatePortfolio, transactions
             if(response.error){
                 notification(response.error)
             } else {
-                dependencies[2](response)
+                setStocks(response)
                 setLoaded(true)
             }
         })
-    // eslint-disable-next-line
-    }, [dependencies[1]])
+    }, [currentUser.balance, currentUser.id, mode])
 
     return (
         <div className="stock_container">
             {loaded?
                 <Fragment>
-                    {mode === "portfolio" ?
-                        portfolio.map(stock => <Stock key={stock.ticker} stock={stock} mode={mode}/>)
-                        :
-                        transactions.map(stock => <Stock key={`${stock.ticker}-${stock.created_at}`} stock={stock} mode={mode}/>)
-                    }
+                    {stocks.map((stock, i) => <Stock key={`${stock.ticker}${mode === "portfolio" ? null : `-${stock.created_at}`}`} stock={stock} mode={mode}/>)}
                 </Fragment>
                 :
                 <h1 align="center">Loading...</h1>
@@ -52,10 +45,8 @@ const StocksContainer = ({ currentUser, portfolio, updatePortfolio, transactions
 
 function msp(state){
     return {
-      currentUser: state.currentUser,
-      portfolio: state.portfolio,
-      transactions: state.transactions
+      currentUser: state.currentUser
     }
 }
 
-export default connect(msp, { updatePortfolio, setTransactions })(StocksContainer)
+export default connect(msp)(StocksContainer)

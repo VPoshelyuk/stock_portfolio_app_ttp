@@ -2,13 +2,18 @@ import Noty from 'noty';
 import "../../node_modules/noty/lib/noty.css";
 import "../../node_modules/noty/lib/themes/mint.css";
 
+/* 
+Noty notifications class that creates a new notification 
+using 1 parameter for buttonless notifications and
+3 for notifications with buttons
+*/
 const newNotification = (text, type = "alert", execFunction) => {
     if(type === "alert"){
         return new Noty({  
             text: `${text}`,
             layout: "bottomRight",
             type: "alert",
-            timeout: 5000,
+            timeout: 3500,
             progressBar: false,
             closeWith: ["click", "button"]
         }).show()

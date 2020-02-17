@@ -1,8 +1,8 @@
 import React from "react"
 import { connect } from 'react-redux'
-import { setUser } from '../redux/actions/user_actions'
+import { setUser } from '../../redux/actions/user_actions'
 
-import notification from "../misc/Notification"
+import notification from "../../misc/Notification"
 
 class LogIn extends React.Component{
   state = {
@@ -18,6 +18,7 @@ class LogIn extends React.Component{
   
   handleSubmit = (e) => {
     e.preventDefault()
+    // call to a backend to login, if successful sets redux current user state to response.user
     fetch("https://stockr-api-app.herokuapp.com/api/v1/login", {
       method: "POST",
       headers: {
@@ -53,8 +54,19 @@ class LogIn extends React.Component{
                 onChange={this.handleChange} 
                 placeholder="Email" 
               />
-              <input className="input" type="password" name="password" value={this.state.password} onChange={this.handleChange} placeholder="Password" />
-              <input className="submit_button" type="submit" value="Log In" />
+              <input 
+                className="input" 
+                type="password" 
+                name="password" 
+                value={this.state.password} 
+                onChange={this.handleChange} 
+                placeholder="Password" 
+              />
+              <input 
+                className="submit_button" 
+                type="submit" 
+                value="Log In" 
+              />
           </form>
       </div>
       );

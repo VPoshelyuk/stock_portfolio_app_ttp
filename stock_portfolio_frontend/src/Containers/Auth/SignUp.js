@@ -1,8 +1,8 @@
 import React from "react";
 import { connect } from 'react-redux'
-import { setUser } from '../redux/actions/user_actions'
+import { setUser } from '../../redux/actions/user_actions'
 
-import notification from "../misc/Notification"
+import notification from "../../misc/Notification"
 
 class SignUp extends React.Component{
     state = {
@@ -19,6 +19,7 @@ class SignUp extends React.Component{
     
     handleSubmit = (e) => {
         e.preventDefault()
+        // call to a backend to signup, if successful sets redux current user state to response.user
         fetch("https://stockr-api-app.herokuapp.com/api/v1/signup", {
         method: "POST",
         headers: {

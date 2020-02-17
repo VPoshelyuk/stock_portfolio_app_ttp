@@ -28,6 +28,8 @@ button:hover {
   box-shadow: 2px 8px 4px -6px rgba(0, 0, 0, 0.3);
 }
 
+/* NAVIGATION BAR START */
+
 header {
   background: rgb(255, 255, 255);
   height: 8vh;
@@ -101,6 +103,8 @@ nav a::before {
 nav a:hover::before {
   width: 100%;
 }
+
+/* NAVIGATION BAR END */
 
 .main_card {
   background-color: white;
@@ -179,6 +183,9 @@ nav a:hover::before {
   flex-flow: row;
   justify-content: center;
 }
+
+/* BUY PART OF PORTFOLIO PAGE START */
+
 .stocks_info {
   width: 60%;
   height: 80%;
@@ -188,6 +195,7 @@ nav a:hover::before {
   flex-flow: column;
   justify-content: flex-start;
 }
+
 .buy_info {
   width: 40%;
   height: 100%;
@@ -200,6 +208,10 @@ nav a:hover::before {
   flex-flow: column;
   justify-content: center;
 }
+
+/* BUY PART OF PORTFOLIO PAGE END */
+
+/* STOCK & STOCK CONTAINER START */
 
 .stock_container {
   width: 90%;
@@ -229,6 +241,10 @@ nav a:hover::before {
   font-weight: bold;
   margin: auto 1vw;
 }
+
+/* STOCK & STOCK CONTAINER END */
+
+/* SELL POP UP START */
 
 .popup_wrap {
   position: fixed;
@@ -272,6 +288,10 @@ nav a:hover::before {
   text-align: center;
 }
 
+/* SELL POP UP END */
+
+/* TRANSACTIONS PROFILE PART START */
+
 .user_info {
   width: 40%;
   height: 92vh;
@@ -293,6 +313,17 @@ nav a:hover::before {
   opacity: 95%;
   border: solid black 2px;
   border-radius: 255px 5px 225px 5px/5px 225px 5px 255px;
+}
+
+/* TRANSACTIONS PROFILE PART END */
+
+.logo404 {
+  margin-left: 30%;
+  margin-top: 0.4vh;
+  width: 40%;
+  text-align: center;
+  border: solid 1px #41403e;
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
 }
 
 @media screen and (max-width: 900px) {

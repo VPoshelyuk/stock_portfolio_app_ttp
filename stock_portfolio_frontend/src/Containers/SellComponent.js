@@ -1,10 +1,10 @@
 import React, {useState} from "react"
 import { connect } from 'react-redux'
-import { updateBalance, updateTransactions } from '../redux/actions/user_actions'
+import { updateBalance } from '../redux/actions/user_actions'
 
 import notification from "../misc/Notification"
 
-const SellComponent = ({currentUser, updateBalance, updateTransactions, stock, triggerPopUp}) => {
+const SellComponent = ({currentUser, updateBalance, stock, triggerPopUp}) => {
     const [availableStocks, setAvailableStocks] = useState(0)
 
     const handleChange = (e) => {
@@ -17,6 +17,7 @@ const SellComponent = ({currentUser, updateBalance, updateTransactions, stock, t
 
     const handleConfirm = () => {
         if(availableStocks > 0){
+            // If sale is confirmed and quantity to sell is not equal to 0, update user balance
             Promise.all([
                 fetch("https://stockr-api-app.herokuapp.com/api/v1/user_stocks", {
                     method: "POST",
@@ -44,16 +45,17 @@ const SellComponent = ({currentUser, updateBalance, updateTransactions, stock, t
                     })
                 })
             ])
-            .then(([stocks, balance]) => Promise.all([stocks.json(), balance.json()]))
-            .then(([stocks, balance]) => {
-                updateTransactions(stocks)
+            .then(([stock, balance]) => balance.json())
+            .then(balance => {
+                // Update Redux state for user's balance => triggers current portfolio update in StockContainer
+                // to update current portfolio & make prices change dynamically on each sell/buy 
                 updateBalance(balance.new_balance)
-
             })
             .catch(error => {
                 notification(error)
             })
         }
+        // close self
         triggerPopUp()
     }
 
@@ -76,7 +78,7 @@ const SellComponent = ({currentUser, updateBalance, updateTransactions, stock, t
                     <h1 align="center">You will earn: ${(availableStocks * parseFloat(stock.price)).toFixed(2)}</h1>
                     <div className="sell_buttons">
                         <button style={{fontSize: "1.5rem"}} onClick={handleConfirm}>Confirm</button>
-                        <button style={{fontSize: "1.5rem"}} onClick={() => triggerPopUp()}>Cancel</button>
+                        <button style={{fontSize: "1.5rem"}} onClick={() => triggerPopUp()/* close self */}>Cancel</button>
                     </div>
                 </div>
             </div>
@@ -90,4 +92,4 @@ function msp(state){
     }
 }
 
-export default connect(msp, { updateBalance, updateTransactions })(SellComponent)
+export default connect(msp, { updateBalance })(SellComponent)
