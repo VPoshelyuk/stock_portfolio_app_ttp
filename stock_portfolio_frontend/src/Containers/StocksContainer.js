@@ -9,7 +9,7 @@ const StocksContainer = ({ currentUser, mode}) => {
     const [stocks, setStocks] = useState([])
 
     useEffect(() => {
-        // in case user updates the page before promise resolution,
+        // in case user updates the page before promise resolves,
         // abort promise to prevent memory leaks in React
         const abortController = new AbortController()
         const signal = abortController.signal
