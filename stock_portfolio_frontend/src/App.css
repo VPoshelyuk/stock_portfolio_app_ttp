@@ -362,11 +362,12 @@ nav a:hover::before {
   }
   .buy_info {
     width: 100%;
+    height: 30vh;
   }
   .stocks_info {
     border: none;
     width: 100%;
-    height: 60vh;
+    height: 62vh;
   }
   .stock_info {
     font-size: 5vw;
