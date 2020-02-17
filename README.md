@@ -1,5 +1,25 @@
 # Stage 2 - TTP Project (Stockr)
-User Stories (6): / <br/><br/>
+
+Front end         |Back end
+------------------|------------------
+React + Redux     |Ruby on Rails
+npm start         |rails s
+
+### Important notes: <br/>
+* All required features from the list down below(User Stories) are implemented.<br/>
+* Plus, added ability to sell stocks: <br/>
+> While at portfolio page *("/" if you are logged in)*, click on the card of the stock you want to sell, <br/>
+> you will be prompted with options to sell shares of chosen stock!<br/>
+* Mobile compatible \*_with all modern smartphones, that Stockr was tested on_\*<br/>
+* While testing the IEX API I noticed that sometimes "open" returns **null**, to prevent program from carshing<br/> 
+or giving out unexpected outputs, if API returns null for "open", all the checks for prices to indicate performance<br />
+are going to be based on "lastClosing" parameter instead. <br />
+
+
+
+<br/>
+
+### User Stories (6): <br/>
  
 ✅1. As a user, I want to create a new account with my name, email, and password so that I can buy and 
 trade stocks:<br/>
@@ -27,3 +47,4 @@ dynamically to indicate performance. <br/>
 ✔ Display red when the current price is less than the day’s open price. <br/>
 ✔ Display grey when the current price is equal to the day’s open price. <br/>
 ✔ Display green when the current price is greater than the day’s open price. <br/>
+
