@@ -9,6 +9,10 @@ const StocksContainer = ({ currentUser, mode}) => {
     const [stocks, setStocks] = useState([])
 
     useEffect(() => {
+        // in case user updates the page before promise resolution,
+        // abort promise to prevent memory leaks in React
+        const abortController = new AbortController()
+        const signal = abortController.signal
         // fetch will depend on mode prop passed to distinguish
         // calls from transactions page & portolio page
         fetch(`https://stockr-api-app.herokuapp.com/api/v1/${mode === "portfolio" ? "user_all" : "user_recent"}`, {
@@ -17,7 +21,8 @@ const StocksContainer = ({ currentUser, mode}) => {
                 "Content-Type": "application/json",
                 "Accept": "application/json"
             },
-            body: JSON.stringify({user_id: currentUser.id})
+            body: JSON.stringify({user_id: currentUser.id}),
+            signal: signal
         })
         .then(res => res.json())
         .then(response => {
@@ -28,6 +33,10 @@ const StocksContainer = ({ currentUser, mode}) => {
                 setLoaded(true)
             }
         })
+        .catch(err => {}) // catching possible aborting error
+ 
+        return () => abortController.abort() //aborting unresolved promise on component unmount
+
     }, [currentUser.balance, currentUser.id, mode])
 
     return (
