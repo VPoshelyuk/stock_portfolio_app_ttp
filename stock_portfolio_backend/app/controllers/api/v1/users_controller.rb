@@ -1,3 +1,9 @@
+=begin
+  * @desc this class holds functions for user interactions
+  * such as: show(used for test purposes only), create(used on sign up), 
+  * update_balance(called on purchase or sale of stocks, updates user balance, renders new balance)
+=end
+
 class Api::V1::UsersController < ApplicationController
     def show
         user = User.find(params[:id])

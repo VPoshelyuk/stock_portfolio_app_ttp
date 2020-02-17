@@ -2,15 +2,17 @@ class Api::V1::UserStocksController < ApplicationController
     require 'uri'
     require 'net/http'
     def user_recent
+        # renders all transactions associated with the user from newest to the oldest
         user_stocks = UserStock.order('created_at DESC').select{ |check_user| check_user.user_id == params[:user_id]}
         render json: user_stocks
     end
 
     def user_all
-        user_portfolio = UserPortfolio.find_by(user_id: params[:user_id])
+        user_portfolio = UserPortfolio.find_by(user_id: params[:user_id]) #find a portfolio belonging to the user
         user_stocks = user_portfolio['stocks']
         user_stocks.map do |stock| 
-            url = URI("https://cloud.iexapis.com/stable/stock/#{stock['ticker']}/quote?token=#{Rails.application.credentials[:iex_token]}&filter=latestPrice,change")
+            # mapping through all the user's stocks to update current price/portfolio value & color
+            url = URI("https://cloud.iexapis.com/stable/stock/#{stock['ticker']}/quote?token=#{Rails.application.credentials[:iex_token]}&filter=open,close,latestPrice,previousClose,iexRealtimePrice,isUSMarketOpen")
             http = Net::HTTP.new(url.host, url.port)
             http.use_ssl = true
             http.verify_mode = OpenSSL::SSL::VERIFY_NONE
@@ -24,15 +26,22 @@ class Api::V1::UserStocksController < ApplicationController
             stock['price'] = data['latestPrice']
             stock['value'] = (data['latestPrice'].to_f * stock['quantity'].to_i).round(2)
 
-            if(data['change'].to_f > 0)
-                stock['color'] = "green"
-            elsif(data['change'].to_f < 0)
-                stock['color'] = "red"
-            end
+            # sometimes when market is closed API returns null for "open"
+            # so use "previousClose" instead if "open" is null
+            cap = data['open'] ? 'open' : 'previousClose'
 
+            # updating the color/checking for difference in latestPrice and 'open'/'previousClose'
+            if((data['latestPrice'].to_f - data[cap].to_f) > 0)
+                stock['color'] = "green"
+            elsif((data['latestPrice'].to_f - data[cap].to_f) < 0)
+                stock['color'] = "red"
+            else
+                stock['color'] = "gray"
+            end
         end
         user_portfolio.update(:stocks => user_stocks)
 
+# Different method to update user's portfolio//cons: creates a new array of objects on every run
         # user_stocks = UserStock.select{ |check_user| check_user.user_id == params[:user_id]}
         # ret_val = []
         # quantity = 0
@@ -87,16 +96,19 @@ class Api::V1::UserStocksController < ApplicationController
 
 
     def create
-        user_stock = UserStock.create(user_stocks_params)
+        user_stock = UserStock.create(user_stocks_params) #creating a new UserStock
         if user_stock.save
+            # if UserStock is successfully saved, find user portfolio
             user_portfolio = UserPortfolio.find_by(user_id: params[:user_id])
             portfolio = user_portfolio['stocks']
             if(!portfolio.find{|stock| stock['ticker'] == user_stock['ticker']}) 
+                # if stock with given ticker, doesn't exist in portfolio yet, add it
                 modified_user_stock = user_stock.attributes
                 modified_user_stock['color'] = "gray"
                 modified_user_stock['value'] = (params[:price].to_f * params[:quantity].to_f).round(2)
                 portfolio.unshift(modified_user_stock)
             else
+                # map through all the stocks in portfolio and update the one with corresponding ticker
                 portfolio.map do |stock| 
                     if(stock['ticker'] == user_stock['ticker'])
                     if(user_stock['status'] == "BUY")
@@ -106,9 +118,9 @@ class Api::V1::UserStocksController < ApplicationController
                     end
                 end
             end
-            portfolio.select!{|stock| stock['quantity'].to_i != 0}
+            portfolio.select!{|stock| stock['quantity'].to_i != 0} #remove stocks with 0 quantity
             end
-            user_portfolio.update(stocks: portfolio)
+            user_portfolio.update(stocks: portfolio) # update portfolio with new stocks list
             render json: user_stock
         else
             render json: { errors: user_stock.errors.full_messages }
